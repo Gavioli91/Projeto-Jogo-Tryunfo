@@ -9,13 +9,14 @@ class App extends React.Component {
     this.state = {
       cardName: '',
       cardDescription: '',
-      cardAttr1: '',
-      cardAttr2: '',
-      cardAttr3: '',
+      cardAttr1: '0',
+      cardAttr2: '0',
+      cardAttr3: '0',
       cardImage: '',
-      cardRare: '',
+      cardRare: 'normal',
       cardTrunfo: false,
       isSaveButtonDisabled: true,
+      newCards: [],
     };
   }
 
@@ -26,7 +27,49 @@ class App extends React.Component {
       this.enableButton();
     });
   }
-  // this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+
+   onSaveButtonClick = this.onSaveButtonClick.bind(this);
+
+   onSaveButtonClick(event) {
+     event.preventDefault();
+
+     const {
+       cardName,
+       cardDescription,
+       cardAttr1,
+       cardAttr2,
+       cardAttr3,
+       cardImage,
+       cardRare,
+       cardTrunfo,
+       newCards,
+     } = this.state;
+
+     const cheap = {
+       cardName,
+       cardDescription,
+       cardAttr1,
+       cardAttr2,
+       cardAttr3,
+       cardImage,
+       cardRare,
+       cardTrunfo,
+     };
+
+     this.setState({ newCards: [...newCards, cheap] }, () => {
+       this.setState({
+         cardName: '',
+         cardDescription: '',
+         cardAttr1: 0,
+         cardAttr2: 0,
+         cardAttr3: 0,
+         cardImage: '',
+         cardRare: 'normal',
+         cardTrunfo: false,
+         isSaveButtonDisabled: true,
+       });
+     });
+   }
 
   attrOk = () => {
     const {
@@ -88,8 +131,16 @@ class App extends React.Component {
       <div>
         <h1>Tryunfo</h1>
         <Form
+          cardName={ cardName }
+          cardDescription={ cardDescription }
+          cardImage={ cardImage }
+          cardAttr1={ cardAttr1 }
+          cardAttr2={ cardAttr2 }
+          cardAttr3={ cardAttr3 }
+          cardRare={ cardRare }
+          cardTrunfo={ cardTrunfo }
           onInputChange={ this.onInputChange }
-          // onSaveButtonClick={ this.onSaveButtonClick }
+          onSaveButtonClick={ this.onSaveButtonClick }
           isSaveButtonDisabled={ isSaveButtonDisabled }
         />
         <Card
