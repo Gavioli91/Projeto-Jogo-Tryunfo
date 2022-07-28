@@ -9,15 +9,18 @@ class App extends React.Component {
     this.state = {
       cardName: '',
       cardDescription: '',
-      cardAttr1: '0',
-      cardAttr2: '0',
-      cardAttr3: '0',
+      cardAttr1: 0,
+      cardAttr2: 0,
+      cardAttr3: 0,
       cardImage: '',
       cardRare: 'normal',
       cardTrunfo: false,
+      hasTrunfo: false,
       isSaveButtonDisabled: true,
       newCards: [],
     };
+    this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+    this.trunfo = this.trunfo.bind(this);
   }
 
   onInputChange({ target }) {
@@ -28,48 +31,48 @@ class App extends React.Component {
     });
   }
 
-   onSaveButtonClick = this.onSaveButtonClick.bind(this);
+  onSaveButtonClick(event) {
+    event.preventDefault();
 
-   onSaveButtonClick(event) {
-     event.preventDefault();
+    const {
+      cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+      cardRare,
+      cardTrunfo,
+      newCards,
+    } = this.state;
 
-     const {
-       cardName,
-       cardDescription,
-       cardAttr1,
-       cardAttr2,
-       cardAttr3,
-       cardImage,
-       cardRare,
-       cardTrunfo,
-       newCards,
-     } = this.state;
+    const cheap = {
+      cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+      cardRare,
+      cardTrunfo,
+    };
 
-     const cheap = {
-       cardName,
-       cardDescription,
-       cardAttr1,
-       cardAttr2,
-       cardAttr3,
-       cardImage,
-       cardRare,
-       cardTrunfo,
-     };
-
-     this.setState({ newCards: [...newCards, cheap] }, () => {
-       this.setState({
-         cardName: '',
-         cardDescription: '',
-         cardAttr1: 0,
-         cardAttr2: 0,
-         cardAttr3: 0,
-         cardImage: '',
-         cardRare: 'normal',
-         cardTrunfo: false,
-         isSaveButtonDisabled: true,
-       });
-     });
-   }
+    this.setState({ newCards: [...newCards, cheap] }, () => {
+      this.setState({
+        cardName: '',
+        cardDescription: '',
+        cardAttr1: 0,
+        cardAttr2: 0,
+        cardAttr3: 0,
+        cardImage: '',
+        cardRare: 'normal',
+        cardTrunfo: false,
+        hasTrunfo: false,
+        isSaveButtonDisabled: true,
+      });
+      this.trunfo();
+    });
+  }
 
   attrOk = () => {
     const {
@@ -115,6 +118,14 @@ class App extends React.Component {
     }
   }
 
+  trunfo() {
+    const {
+      newCards,
+    } = this.state;
+    const hasTrunfo = newCards.some((cheap) => cheap.cardTrunfo);
+    this.setState({ hasTrunfo });
+  }
+
   render() {
     const {
       cardName,
@@ -125,8 +136,11 @@ class App extends React.Component {
       cardAttr3,
       cardRare,
       cardTrunfo,
+      hasTrunfo,
+      newCards,
       isSaveButtonDisabled,
     } = this.state;
+
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -139,20 +153,23 @@ class App extends React.Component {
           cardAttr3={ cardAttr3 }
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
+          hasTrunfo={ hasTrunfo }
           onInputChange={ this.onInputChange }
           onSaveButtonClick={ this.onSaveButtonClick }
           isSaveButtonDisabled={ isSaveButtonDisabled }
         />
-        <Card
-          cardName={ cardName }
-          cardDescription={ cardDescription }
-          cardImage={ cardImage }
-          cardAttr1={ cardAttr1 }
-          cardAttr2={ cardAttr2 }
-          cardAttr3={ cardAttr3 }
-          cardRare={ cardRare }
-          cardTrunfo={ cardTrunfo }
-        />
+        {newCards.map((play, callback) => (
+          <Card
+            key={ callback }
+            cardName={ play.cardName }
+            cardDescription={ play.cardDescription }
+            cardImage={ play.cardImage }
+            cardAttr1={ play.cardAttr1 }
+            cardAttr2={ play.cardAttr2 }
+            cardAttr3={ play.cardAttr3 }
+            cardRare={ play.cardRare }
+            cardTrunfo={ play.cardTrunfo }
+          />))}
       </div>
     );
   }
