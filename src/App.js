@@ -158,6 +158,16 @@ class App extends React.Component {
           onSaveButtonClick={ this.onSaveButtonClick }
           isSaveButtonDisabled={ isSaveButtonDisabled }
         />
+        <Card
+          cardName={ cardName }
+          cardDescription={ cardDescription }
+          cardImage={ cardImage }
+          cardAttr1={ cardAttr1 }
+          cardAttr2={ cardAttr2 }
+          cardAttr3={ cardAttr3 }
+          cardRare={ cardRare }
+          cardTrunfo={ cardTrunfo }
+        />
         {newCards.map((play, callback) => (
           <Card
             key={ callback }
